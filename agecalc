@@ -1,0 +1,85 @@
+#!/bin/bash
+#author: Ibrahim
+# Date: 9/18/2019
+
+# Initialization
+
+let "current_yr = `date +%-Y`"
+let "current_mth= `date +%-m`"
+let "current_day= `date +%-d`"
+
+echo -e "Do you want to run the agecalc (Y or N): \c"
+read ans
+while  true;
+do
+  if [ $ans = "yes" ] || [ $ans = "y" ] || [ $ans = "Y" ]
+  then
+       #inputs
+       echo -e "Enter your name: \c"
+       read name
+#######################################
+       echo -e "Enter your year of birth (ex 1991): \c"
+       read yr_of_birth
+       while [ $yr_of_birth -lt 1900 ] || [ $yr_of_birth -gt $current_yr ]
+       do
+         echo -e "You have entered an invalid birth year. Please enter it again: \c"
+         read yr_of_birth
+       done
+######################
+       echo -e "Enter your month of birth (ex 01-12): \c"
+       read mth_of_birth
+       while [ $mth_of_birth -lt 0 ] || [ $mth_of_birth -gt 12 ]
+       do
+         echo -e "You have entered an invalid birth month. Please enter it again: \c"
+         read mth_of_birth
+       done
+###################################
+       echo -e "Enter your date of birth (ex 01-31): \c"
+       read date_of_birth
+       while [ $date_of_birth -lt 0 ] || [ $date_of_birth -gt 31 ]
+       do
+         echo -e "You have entered an invalid birth date. Please enter it again: \c"
+         read date_of_birth
+       done
+
+
+###########################
+
+       #process
+       if [ $mth_of_birth -le $current_mth ]
+       then
+          let "age= $current_yr-$yr_of_birth"
+          let "age_in_mths= $current_mth-$mth_of_birth"
+       else
+          let "age= $current_yr-$yr_of_birth-1"
+          let "age_in_mths= $current_mth-$mth_of_birth+12"
+          if [ $date_of_birth -le $current_day ]
+          then
+             let "age_in_days=$date_of_birth"
+          else
+             let "age_in_days=$current_day-$date_of_birth"
+          fi
+       fi
+
+       #output
+       echo $name ",your age is" $age "years and" $age_in_mths "months and" $age_in_days "days."
+       #update loop count
+
+       echo -e "Do you want to run again (y/n) \c"
+       read ans
+       if [ $ans = "N" ] || [ $ans = "n" ]
+       then
+          exit 1
+       fi
+  else
+       #update loop count
+       if [ $ans = "N" ] || [ $ans = "n" ]
+       then
+          exit 1
+       fi
+
+       echo -e "You entered an invalid option. Please try again"
+       read ans
+  fi
+done
+
